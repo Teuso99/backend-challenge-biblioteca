@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BibliotecaAPI.Models;
@@ -20,25 +18,22 @@ namespace BibliotecaAPI.Controllers
             _context = context;
         }
 
+        // POST: Obras
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost]
+        public async Task<ActionResult<Obra>> PostObra(Obra obra)
+        {
+            _context.Obra.Add(obra);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetObra", new { id = obra.Id }, obra);
+        }
+
         // GET: Obras
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Obra>>> GetObra()
         {
             return await _context.Obra.ToListAsync();
-        }
-
-        // GET: Obras/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Obra>> GetObra(long id)
-        {
-            var obra = await _context.Obra.FindAsync(id);
-
-            if (obra == null)
-            {
-                return NotFound();
-            }
-
-            return obra;
         }
 
         // PUT: Obras/5
@@ -70,17 +65,6 @@ namespace BibliotecaAPI.Controllers
             }
 
             return NoContent();
-        }
-
-        // POST: Obras
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Obra>> PostObra(Obra obra)
-        {
-            _context.Obra.Add(obra);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetObra", new { id = obra.Id }, obra);
         }
 
         // DELETE: Obras/5
